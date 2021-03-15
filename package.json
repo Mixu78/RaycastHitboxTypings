@@ -1,0 +1,36 @@
+{
+	"name": "@rbxts/raycast-hitbox",
+	"version": "1.0.0",
+	"description": "Typings for Swordphin's RaycastHitbox module",
+	"main": "out/init.lua",
+	"scripts": {
+		"prepublishOnly": "rbxtsc"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"homepage": "https://github.com/Mixu78/RaycastHitboxTypings#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Mixu78/RaycastHitboxTypings.git"
+	},
+	"types": "out/typings/index.d.ts",
+	"files": [
+		"out"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@rbxts/compiler-types": "^1.0.0-types.0",
+		"@rbxts/types": "^1.0.463",
+		"@typescript-eslint/eslint-plugin": "^4.17.0",
+		"@typescript-eslint/parser": "^4.17.0",
+		"eslint": "^7.22.0",
+		"eslint-config-prettier": "^8.1.0",
+		"eslint-plugin-prettier": "^3.3.1",
+		"eslint-plugin-roblox-ts": "^0.0.25",
+		"prettier": "^2.2.1",
+		"typescript": "^4.2.3"
+	}
+}
