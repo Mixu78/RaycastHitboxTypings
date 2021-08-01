@@ -1,6 +1,11 @@
+--!strict
+--- Main RaycastModuleV4 2021
+-- @author Swordphin123
+
 --[[
 ____________________________________________________________________________________________________________________________________________________________________________
-	Created by Swordphin123 - 2020. If you have any questions, feel free to message me on DevForum. Credits not neccessary but is appreciated.
+
+	If you have any questions, feel free to message me on DevForum. Credits not neccessary but is appreciated.
 	
 	[ How To Use - Quick Start Guide ]
 	
@@ -11,43 +16,38 @@ ________________________________________________________________________________
 				* Example Code
 					
 					local Damage = 10
-					local Hitbox = RaycastHitbox:Initialize(Character, {Character})
+					local Hitbox = RaycastHitbox.new(Character)
 					
 					Hitbox.OnHit:Connect(function(hit, humanoid)
 						print(hit.Name)
 						humanoid:TakeDamage(Damage)
 					end)
 					
-					Hitbox:HitStart()
-					wait(2)
-					Hitbox:HitStop()
+					Hitbox:HitStart() --- Turns on the hitbox
+					wait(10) --- Waits 10 seconds
+					Hitbox:HitStop() --- Turns off the hitbox
 		
 		4. Profit. Refer to the API below for more information.
 				
-	
+
 ____________________________________________________________________________________________________________________________________________________________________________
+
 	[ RaycastHitBox API ]
-	
-		* local RaycastHitbox = require(RaycastHitbox) ---Duh
+
+		* local RaycastHitbox = require(RaycastHitboxV4) ---Duh
 				--- To use, insert this at the top of your scripts or wherever.
-				
-				
-		
-		* RaycastHitbox:Initialize(Instance model, table ignoreList)
+
+
+			[ FUNCTIONS ]
+
+		* RaycastHitbox.new(Instance model | BasePart | nil)
 				Description
-					--- Preps the model and recursively finds attachments in it so it knows where to shoot rays out of later.
+					--- Preps the model and recursively finds attachments in it so it knows where to shoot rays out of later. If a hitbox exists for this
+					--- object already, it simply returns the same hitbox.
 				Arguments
-					--- Instance model: Model instance (Like your character, a sword model, etc). May support Parts later.
-					--- table ignoreList: Raycast takes in ignorelists. Heavily recommended to add in a character so it doesn't hurt itself in its confusion.
+					--- Instance:  (Like your character, a sword model, etc). Can be left nil in case you want an empty Hitbox or use SetPoints later
 				Returns
-					Instance HitboxObject 
-					
-		* RaycastHitbox:Deinitialize(Instance model)
-				Description
-					--- Removes references to the attachments and garbage collects values from the original init instance. Great if you are deleting the hitbox soon.
-					--- The script will attempt to run this function automatically if the model ancestry was changed.
-				Arguments
-					--- Instance model: Same model that you initialized with earlier. Will do nothing if model was not initialized.
+					Instance HitboxObject
 						
 		* RaycastHitModule:GetHitbox(Instance model)
 				Description
@@ -55,39 +55,23 @@ ________________________________________________________________________________
 				Returns
 					--- HitboxObject if found, else nil
 					
-					
-					
-					
-					
-					
-					
-		* HitboxObject:DebugMode(boolean true/false)
-				Description
-					--- Turn the Hitbox DebugRays on or off during runtime.
-				Arguments
-					--- boolean: true for on, false for off.
 		
-		* HitboxObject:PartMode(boolean true/false)
-				Description
-					--- If true, OnHit will return every hit part (in respect to the hitbox's ignore list), regardless if it's ascendant has a humanoid or not. Defaults false.
-					--- OnHit will no longer return a humanoid so you will have to check it. Performance may suffer if there are a lot of parts, use only if necessary.
-				Arguments
-					--- boolean: true for parts return, false for off.
 		
-		* HitboxObject:SetPoints(Instance part, table vectorPoints)
+		* HitboxObject:SetPoints(Instance BasePart | Bone, table vectorPoints, string group)
 				Description
-					--- Merges existing Hitbox points with new Vector3 values relative to a part position. This part can be a descendent of your original Hitbox model or can be
-						an entirely different instance that is not related to the hitbox (example: Have a weapon with attachments and you can then add in more vector3 
+					--- Merges existing Hitbox points with new Vector3 values relative to a part/bone position. This part can be a descendent of your original Hitbox model or
+						can be an entirely different instance that is not related to the hitbox (example: Have a weapon with attachments and you can then add in more vector3
 						points without instancing new attachments, great for dynamic hitboxes)
 				Arguments
-					--- Instance part: Sets the part that these vectorPoints will move in relation to the part's origin using Vector3ToWorldSpace
+					--- Instance BasePart | Bone: Sets the part/bone that these vectorPoints will move in relation to the part's origin using Vector3ToWorldSpace
 					--- table vectorPoints: Table of vector3 values.
+					--- string group: optional group parameter
 					
-		* HitboxObject:RemovePoints(Instance part, table vectorPoints)
+		* HitboxObject:RemovePoints(Instance BasePart | Bone, table vectorPoints)
 				Description
 					--- Remove given Vector3 values provided the part was the same as the ones you set in SetPoints
 				Arguments
-					--- Instance part: Sets the part that these vectorPoints will be removed from in relation to the part's origin using Vector3ToWorldSpace
+					--- Instance BasePart | Bone: Sets the part that these vectorPoints will be removed from in relation to the part's origin using Vector3ToWorldSpace
 					--- table vectorPoints: Table of vector3 values.
 		
 		* HitboxObject:LinkAttachments(Instance attachment1, Instance attachment2)
@@ -113,54 +97,125 @@ ________________________________________________________________________________
 		* HitboxObject:HitStop()
 				Description
 					--- Stops drawing the rays and resets the target pool. Will do nothing if no rays are being drawn from the initialized model.
-		* HitboxObject.OnHit:Connect(returns: Instance part, returns: Instance humanoid, returns: RaycastResults)
+
+		* HitboxObject.OnHit:Connect(returns: Instance part, returns: Instance humanoid, returns: RaycastResults, returns: String group)
 				Description
 					--- If HitStart hits a fresh new target, OnHit returns information about the hit target
 				Arguments
 					--- Instance part: Returns the part that the rays hit first
 					--- Instance humanoid: Returns the Humanoid object 
-					--- Instance RaycastResults: Returns information about the last raycast results
+					--- RaycastResults RaycastResults: Returns information about the last raycast results
+					--- String group: Returns information on the hitbox's group
 					
 		* HitboxObject.OnUpdate:Connect(returns: Vector3 position)
 				Description
 					--- This fires every frame, for every point, returning a Vector3 value of its last position in space. Do not use expensive operations in this function.
 		
+
+			[ PROPERTIES ]
+
+		* HitboxObject.RaycastParams: RaycastParams
+				Description
+					--- Takes in a RaycastParams object
+
+		* HitboxObject.Visualizer: boolean
+				Description
+					--- Turns on or off the debug rays for this hitbox
+
+		* HitboxObject.DebugLog: boolean
+				Description
+					--- Turns on or off output writing for this hitbox
+
+		* HitboxObject.DetectionMode: number [1 - 3]
+				Description
+					--- Defaults to 1. Refer to DetectionMode subsection below for more information
+
+			
+			[ DETECTION MODES ]
+
+		* RaycastHitbox.DetectionMode.Default
+				Description
+					--- Checks if a humanoid exists when this hitbox touches a part. The hitbox will not return humanoids it has already hit for the duration
+					--- the hitbox has been active.
+
+		* RaycastHitbox.DetectionMode.PartMode
+				Description
+					--- OnHit will return every hit part (in respect to the hitbox's RaycastParams), regardless if it's ascendant has a humanoid or not.
+					--- OnHit will no longer return a humanoid so you will have to check it. The hitbox will not return parts it has already hit for the
+					--- duration the hitbox has been active.
+
+		* RaycastHitbox.DetectionMode.Bypass
+				Description
+					--- PERFORMANCE MAY SUFFER IF THERE ARE A LOT OF PARTS. Use only if necessary.
+					--- Similar to PartMode, the hitbox will return every hit part. Except, it will keep returning parts even if it has already hit them.
+					--- Warning: If you have multiple raycast or attachment points, each raycast will also call OnHit. Allows you to create your own
+					--- filter system.
 		
 ____________________________________________________________________________________________________________________________________________________________________________
+
 --]]
 
-local RaycastHitbox = { 
-	Version = "3.3",
-	AttachmentName = "DmgPoint",
-	DebugMode = false,
-	WarningMessage = false
+-- Show where the red lines are going. You can change their colour and width in VisualizerCache
+local SHOW_DEBUG_RAY_LINES: boolean = true
+
+-- Allow RaycastModule to write to the output
+local SHOW_OUTPUT_MESSAGES: boolean = true
+
+-- The tag name. Used for cleanup.
+local DEFAULT_COLLECTION_TAG_NAME: string = "_RaycastHitboxV4Managed"
+
+--- Initialize required modules
+local CollectionService: CollectionService = game:GetService("CollectionService")
+local HitboxData = require(script.HitboxCaster)
+local Signal = require(script.Signal)
+
+local RaycastHitbox = {}
+RaycastHitbox.__index = RaycastHitbox
+RaycastHitbox.__type = "RaycastHitboxModule"
+
+-- Detection mode enums
+RaycastHitbox.DetectionMode = {
+	Default = 1,
+	PartMode = 2,
+	Bypass = 3,
 }
 
---------
+--- Creates or finds a hitbox object. Returns an hitbox object
+-- @param required object parameter that takes in either a part or a model
+function RaycastHitbox.new(object: any?)
+	local hitbox: any
 
-local Handler = require(script.MainHandler)
-local HitboxClass = require(script.HitboxObject)
+	if object and CollectionService:HasTag(object, DEFAULT_COLLECTION_TAG_NAME) then
+		hitbox = HitboxData:_FindHitbox(object)
+	else
+		hitbox = setmetatable({
+			RaycastParams = nil,
+			DetectionMode = RaycastHitbox.DetectionMode.Default,
+			HitboxRaycastPoints = {},
+			HitboxPendingRemoval = false,
+			HitboxStopTime = 0,
+			HitboxObject = object,
+			HitboxHitList = {},
+			HitboxActive = false,
+			Visualizer = SHOW_DEBUG_RAY_LINES,
+			DebugLog = SHOW_OUTPUT_MESSAGES,
+			OnUpdate = Signal:Create(),
+			OnHit = Signal:Create(),
+			Tag = DEFAULT_COLLECTION_TAG_NAME,
+		}, HitboxData)
 
-function RaycastHitbox:Initialize(object, ignoreList)
-	assert(object, "You must provide an object instance.")
-	
-	local newHitbox = Handler:check(object)
-	if not newHitbox then
-		newHitbox = HitboxClass:new()
-		newHitbox:config(object, ignoreList)
-		newHitbox:seekAttachments(RaycastHitbox.AttachmentName, RaycastHitbox.WarningMessage)
-		newHitbox.debugMode = RaycastHitbox.DebugMode
-		Handler:add(newHitbox)
+		hitbox:_Init()
 	end
-	return newHitbox
+
+	return hitbox
 end
 
-function RaycastHitbox:Deinitialize(object) --- Deprecated
-	Handler:remove(object)
-end
-
-function RaycastHitbox:GetHitbox(object)
-   return Handler:check(object)
+--- Finds a hitbox object if valid, else return nil
+-- @param Object instance
+function RaycastHitbox:GetHitbox(object: any?)
+	if object then
+		return HitboxData:_FindHitbox(object)
+	end
 end
 
 return RaycastHitbox

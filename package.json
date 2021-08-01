@@ -1,11 +1,8 @@
 {
 	"name": "@rbxts/raycast-hitbox",
-	"version": "3.3.0-ts.0",
+	"version": "4.0.0-ts.0",
 	"description": "Typings for Swordphin's RaycastHitbox module",
-	"main": "out/init.lua",
-	"scripts": {
-		"prepublishOnly": "rbxtsc"
-	},
+	"main": "src/init.lua",
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -14,9 +11,9 @@
 		"type": "git",
 		"url": "https://github.com/Mixu78/RaycastHitboxTypings.git"
 	},
-	"types": "out/typings/index.d.ts",
+	"types": "src/index.d.ts",
 	"files": [
-		"out"
+		"src"
 	],
 	"publishConfig": {
 		"access": "public"
