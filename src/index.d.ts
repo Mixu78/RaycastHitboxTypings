@@ -108,15 +108,16 @@ interface HitboxObject {
 	OnUpdate: RBXScriptSignal<(pointPosition: Vector3) => void>;
 }
 
-declare namespace RaycastHitbox {
-	function nnew(object: Instance): HitboxObject;
-	export { nnew as new };
+interface RaycastHitbox {
+	new (object: Instance): HitboxObject;
 
 	/**
 	 * Returns an existing HitboxObject using the original object instance as its search parameter.
 	 * Returns nil if no HitboxObject was found.
 	 */
-	export function GetHitbox(this: typeof RaycastHitbox, object: Instance): HitboxObject | undefined;
+	GetHitbox(this: RaycastHitbox, object: Instance): HitboxObject | undefined;
 }
+
+declare const RaycastHitbox: RaycastHitbox;
 
 export = RaycastHitbox;
