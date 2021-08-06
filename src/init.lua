@@ -218,4 +218,4 @@ function RaycastHitbox:GetHitbox(object: any?)
 	end
 end
 
-return RaycastHitbox
+return { default = RaycastHitbox }

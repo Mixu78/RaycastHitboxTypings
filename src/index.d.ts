@@ -120,4 +120,5 @@ interface RaycastHitbox {
 
 declare const RaycastHitbox: RaycastHitbox;
 
-export = RaycastHitbox;
+export { HitboxObject };
+export default RaycastHitbox;
