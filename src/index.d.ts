@@ -36,7 +36,24 @@ interface HitboxObject {
 	 * Warning: If you have multiple raycast or attachment points, each raycast will also call OnHit.
 	 * Allows you to create your own filter system.
 	 */
-	DetectionMode: 1 | 2 | 3;
+	DetectionMode: DetectionMode;
+
+	/**
+	 * NOTICE:
+	 * > RaycastHitbox.SignalType.Default can introduce memory leaks if used incorrectly.
+	 * > Remember to destroy the hitbox or disconnect the listener when it is no longer needed.
+	 *
+	 * Defaults to RaycastHitbox.SignalType.Single (2). Determines how the signal behaviour should be applied.
+	 * Refer down below to all different types of SignalTypes.
+	 *
+	 * - Default (1) - Acts similarly to RBXScriptSignal. If you need to listen to the hitbox from multiple scripts or entities,
+	 * OnUpdate/OnHit will fire to all listeners (in the order that they are hooked to).
+	 *
+	 * - Single (2) - Default behaviour of RaycastHitbox due to legacy purposes.
+	 * OnUpdate/OnHit accepts only one listener.
+	 * OnUpdate/OnHit will ignore and garbage collects any old listeners and only fires to the most recent listener.
+	 */
+	SignalType: SignalType;
 
 	/**
 	 * Merges existing Hitbox points with new Vector3 values relative to the part / bone position.
@@ -116,6 +133,21 @@ interface RaycastHitbox {
 	 * Returns nil if no HitboxObject was found.
 	 */
 	GetHitbox(this: RaycastHitbox, object: Instance): HitboxObject | undefined;
+
+	SignalType: typeof SignalType;
+
+	DetectionMode: typeof DetectionMode;
+}
+
+declare enum SignalType {
+	Default = 1,
+	Single,
+}
+
+declare enum DetectionMode {
+	Default = 1,
+	PartMode,
+	Bypass,
 }
 
 declare const RaycastHitbox: RaycastHitbox;
