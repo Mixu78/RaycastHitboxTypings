@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/raycast-hitbox",
-	"version": "4.0.1-ts.0",
+	"version": "4.0.1-ts.1",
 	"description": "Typings for Swordphin's RaycastHitbox module",
 	"main": "src/init.lua",
 	"keywords": [],
